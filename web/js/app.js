@@ -17,7 +17,10 @@ $(document).ready(function () {
              */
             $('.addVisitDate').val(visitDate);
             $('.visitTime').val(visitTime);
-            $("#addVisit").modal();
+            $("#addVisit").modal({
+                backdrop: 'static',
+                keyboard: false
+            });
 
         },
         header: {
@@ -45,10 +48,11 @@ $(document).ready(function () {
             }
         ]
     });
-
+    
+    var host =window.location.host;
     $.ajax({
         method: 'GET',
-        url: 'http://localhost:8080/visitsScheduler/api/technicians/getAll',
+        url: 'http://'+host+'/visitsScheduler/api/technicians/getAll',
         success: function (result) {
 //                alert("Result is: " + result.name);
             technicians = result.name;
@@ -64,21 +68,20 @@ $(document).ready(function () {
         $('.time-picker').fadeIn(500);
     });
 
-    $('.time-picker ul li, #close').click(function () {
+    $('.time-picker ul li, #close, .close').click(function () {
 
         var visitStartTime = $('#visitStartTime').val().substring(0, 2);
         var visitEndTime = $(this).html();
         var visitEndTimeAfterCut = $(this).html().substring(0, 2);
         checkContains = visitEndTime.indexOf("30");
-        if ((visitStartTime <= visitEndTimeAfterCut) && visitEndTime !== "Close") {
+        if ((visitStartTime <= visitEndTimeAfterCut) && visitEndTime !== "Close" && visitEndTime !== '<span aria-hidden="true">×</span>') {
             if ((visitStartTime == visitEndTimeAfterCut) && checkContains === -1) {
                 alert("Can't start and end in the same time");
-            }
-            else {
+            } else {
                 $('#visitEndtime').val(visitEndTime);
             }
         } else {
-            if (visitEndTime != "Close")
+            if (visitEndTime != "Close" && visitEndTime !== '<span aria-hidden="true">×</span>')
                 alert("Please pick time above to Start Time value");
         }
         $('.time-picker').fadeOut(500);
