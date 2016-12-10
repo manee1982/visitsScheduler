@@ -1,0 +1,36 @@
+
+body {
+    padding-top: 20px;
+}
+.app-icon {
+    margin: 0 auto;
+    max-width: 60%;
+}
+.help {
+    font-size: 1.7em;
+}
+.empty_loaded {
+
+}
+option {
+    padding: 5px;
+}
+.app-disc-paddin {
+    padding-top: 30px;
+}
+.time-picker {
+    background: #fff none repeat scroll 0 0;
+    box-shadow: 1px 2px 3px #707070;
+    display: none;
+    font-size: 16px;
+    left: 40%;
+    max-width: 200px;
+    position: absolute;
+    text-align: center;
+    top: 234px;
+    width: 200px;
+    z-index: 9000;
+}
+.time-picker ul li:hover {
+    background: #f2f2f2;
+}

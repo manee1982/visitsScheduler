@@ -9,14 +9,14 @@ $(document).ready(function () {
             //alert(current_date);
             //Open visits modal
             visitDate = current_date.getFullYear() + '-' + (current_date.getMonth() + 1) + '-' + current_date.getDate();
-            visitTime = current_date.getHours() + ':' + current_date.getMinutes();
+            visitTime = current_date.getHours() + ' : ' + current_date.getMinutes();
             if (current_date.getMinutes() == 0)
                 visitTime = current_date.getHours() + ':' + current_date.getMinutes() + '0';
             /*
              *	get all tehnician from java Resful (JAX-RS) web resvice
              */
-            $('.addVisitDate').html(visitDate);
-            $('.visitTime').html(visitTime);
+            $('.addVisitDate').val(visitDate);
+            $('.visitTime').val(visitTime);
             $("#addVisit").modal();
 
         },
@@ -55,10 +55,33 @@ $(document).ready(function () {
             techniciansIds = result.id;
             // poulate technician list
             for (i = 0; i < technicians.length; i++) {
-                $('#technicianList').append("<option value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
+                $('#technician').append("<option value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
             }
         }
     });
 
+    $('#visitEndtime').click(function () {
+        $('.time-picker').fadeIn(500);
+    });
+
+    $('.time-picker ul li, #close').click(function () {
+
+        var visitStartTime = $('#visitStartTime').val().substring(0, 2);
+        var visitEndTime = $(this).html();
+        var visitEndTimeAfterCut = $(this).html().substring(0, 2);
+
+        if ((visitStartTime <= visitEndTimeAfterCut) && visitEndTime != "Close") {
+            if ((visitStartTime == visitEndTimeAfterCut) && visitEndTime.includes(":30")) {
+                if (visitEndTime != "Close")
+                    alert("Please pick time above to Start Time value");
+                else
+                    $('#visitEndtime').val(visitEndTime);
+            }
+        } else {
+            if (visitEndTime != "Close")
+                alert("Please pick time above to Start Time value");
+        }
+        $('.time-picker').fadeOut(500);
+    });
 
 }); // End jQuery ready function

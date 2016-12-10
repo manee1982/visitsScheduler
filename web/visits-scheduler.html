@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Schedule technician visits</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link href='css/bootstrap.min.css' rel='stylesheet' />
+        <link href='css/fullcalendar.min.css' rel='stylesheet' />
+        <link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+        <link href='css/app.css' rel='stylesheet' />
+        
+        <script src='js/jquery.min.js'></script>
+        <script src='js/bootstrap.min.js'></script>
+        <script src='js/moment.min.js'></script>
+        <script src='js/fullcalendar.min.js'></script>
+        <script src='js/app.js'></script>
+
+        <!-- within page script -->
+        <script type="text/javascript">
+
+        </script>
+        <!-- within page style -->
+        <style type="text/css">
+        </style>
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="col-md-8">
+                <div id='calendar'></div>
+            </div>
+            <div class="col-md-4 app-disc-paddin">
+                <h2 class="text-warning">Technicians Scheduler</h2>
+                <p>Welcome to sceduler visits application, this application schedules and maintain technicians visits to the company clients.</p>
+                <h3>Features:</h3>
+                <ul>
+                    <li>Schedule visits.</li>
+                    <li>Manage technician load-time.</li>
+                    <li>Display and manage visits in calendar.</li>
+                </ul>
+                <h3>Note</h3>
+                <p>This application talks to a <a href="https://jersey.java.net/">Java RESTful (JAX-RS) web service API</a>, in server-side which makes all functionality that needed to save, reserve and manipulate visits data.</p>
+                <p>This application uses <a href="https://fullcalendar.io/">FullCalendar</a> javascript library in client-side.</p>
+                <!--<p>Click the help icon to get help on how to use this app <a href="#"><i class="glyphicon glyphicon-question-sign help"></i></a></p>-->
+                <a id="back-to-main-page" class="btn btn-primary btn-block" href="">Back to main page</a>
+                <br>
+                <br>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Modal to add visits-->
+            <div class="modal fade" id="addVisit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Schedule Technician Visit</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="visitDate" class="col-sm-2 control-label">Visit Date</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control addVisitDate" id="addVisitDate" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="visitStartTime" class="col-sm-2 control-label">Start Time</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control visitTime" id="visitStartTime" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="visitEndtime" class="col-sm-2 control-label">End Time</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" onkeypress="return false" class="form-control" name="visitEndtime" id="visitEndtime" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description" class="col-sm-2 control-label">Description</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="description" id="description" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="technician" class="col-sm-2 control-label">Technician</label>
+                                            <div class="col-sm-10">
+                                                <select id="technician" class="form-control btn-block" name="technician">
+                                                    <option value=""> Select technician </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Schedule</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="time-picker">
+                    <ul class="list-unstyled">
+                        <li>12 : 00</li>
+                        <li>12 : 30</li>
+                        <li>13 : 00</li>
+                        <li>13 : 30</li>
+                        <li>14 : 00</li>
+                        <li>14 : 30</li>
+                        <li>15 : 00</li>
+                        <li>15 : 30</li>
+                        <li>16 : 00</li>
+                        <li>16 : 30</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $("a#back-to-main-page").attr("href", "http://" + window.location.host + "/visitsScheduler");
+        });
+    </script>
+    </body>
+</html>
