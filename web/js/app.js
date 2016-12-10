@@ -69,13 +69,13 @@ $(document).ready(function () {
         var visitStartTime = $('#visitStartTime').val().substring(0, 2);
         var visitEndTime = $(this).html();
         var visitEndTimeAfterCut = $(this).html().substring(0, 2);
-
-        if ((visitStartTime <= visitEndTimeAfterCut) && visitEndTime != "Close") {
-            if ((visitStartTime == visitEndTimeAfterCut) && visitEndTime.includes(":30")) {
-                if (visitEndTime != "Close")
-                    alert("Please pick time above to Start Time value");
-                else
-                    $('#visitEndtime').val(visitEndTime);
+        checkContains = visitEndTime.indexOf("30");
+        if ((visitStartTime <= visitEndTimeAfterCut) && visitEndTime !== "Close") {
+            if ((visitStartTime == visitEndTimeAfterCut) && checkContains === -1) {
+                alert("Can't start and end in the same time");
+            }
+            else {
+                $('#visitEndtime').val(visitEndTime);
             }
         } else {
             if (visitEndTime != "Close")
