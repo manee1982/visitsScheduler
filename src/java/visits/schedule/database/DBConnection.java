@@ -11,6 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONObject;
+import visits.schedule.api.TechniciansResource;
 
 /**
  *
@@ -52,6 +56,19 @@ public class DBConnection {
             
         } catch (Exception e) {
             throw e;
+        }
+    }
+    
+    protected boolean insert(String query) throws SQLException {
+        try {
+            
+            stmt = getConnection().createStatement();
+            stmt.executeUpdate(query);
+            return true;
+            
+        } catch (Exception e) {
+            Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, e);
+            return false;
         }
     }
     

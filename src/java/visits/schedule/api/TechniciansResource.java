@@ -10,11 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import org.json.JSONException;
 import visits.schedule.database.Technicians;
@@ -54,14 +52,5 @@ public class TechniciansResource {
         }
         
         return null;
-    }
-
-    /**
-     * PUT method for updating or creating an instance of TechniciansResource
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    public void putXml(String content) {
     }
 }

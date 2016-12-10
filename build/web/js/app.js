@@ -17,7 +17,11 @@ $(document).ready(function () {
              */
             $('.addVisitDate').val(visitDate);
             $('.visitTime').val(visitTime);
-            $("#addVisit").modal();
+            $('#visitEndtime').val("");
+            $("#addVisit").modal({
+                backdrop: 'static',
+                keyboard: false
+            });
 
         },
         header: {
@@ -46,9 +50,12 @@ $(document).ready(function () {
         ]
     });
 
+    // Get the host name instead of localhost
+    var host = window.location.host;
+
     $.ajax({
         method: 'GET',
-        url: 'http://localhost:8080/visitsScheduler/api/technicians/getAll',
+        url: 'http://' + host + '/visitsScheduler/api/technicians/getAll',
         success: function (result) {
 //                alert("Result is: " + result.name);
             technicians = result.name;
@@ -64,24 +71,113 @@ $(document).ready(function () {
         $('.time-picker').fadeIn(500);
     });
 
-    $('.time-picker ul li, #close').click(function () {
+    $('.time-picker ul li, #close, .close').click(function () {
 
         var visitStartTime = $('#visitStartTime').val().substring(0, 2);
         var visitEndTime = $(this).html();
         var visitEndTimeAfterCut = $(this).html().substring(0, 2);
-
-        if ((visitStartTime <= visitEndTimeAfterCut) && visitEndTime != "Close") {
-            if ((visitStartTime == visitEndTimeAfterCut) && visitEndTime.includes(":30")) {
-                if (visitEndTime != "Close")
-                    alert("Please pick time above to Start Time value");
-                else
-                    $('#visitEndtime').val(visitEndTime);
+        checkContains = visitEndTime.indexOf("30");
+        if ((visitStartTime <= visitEndTimeAfterCut) && visitEndTime !== "Close" && visitEndTime !== '<span aria-hidden="true">×</span>') {
+            if ((visitStartTime == visitEndTimeAfterCut) && checkContains === -1) {
+                alert("Can't start and end in the same time");
+            } else {
+                $('#visitEndtime').val(visitEndTime);
             }
         } else {
-            if (visitEndTime != "Close")
+            if (visitEndTime != "Close" && visitEndTime !== '<span aria-hidden="true">×</span>')
                 alert("Please pick time above to Start Time value");
         }
         $('.time-picker').fadeOut(500);
     });
+
+    $('#scheduleVisit').click(function () {
+        // alert(calculateWorkLoadPercentage());
+        // send visit scheduling to server
+        addVisitDate = $('#addVisitDate').val();
+        visitStartTime = $('#visitStartTime').val();
+        visitEndtime = $('#visitEndtime').val();
+        if(visitEndtime == ""){
+            alert("Error: Please be sure to inter all data required");
+            return;
+        }
+        description = $('#description').val();
+        if(description == ""){
+            alert("Error: Please be sure to inter all data required");
+            return;
+        }
+            
+        technician = $('#technician').val();
+        percentage = calculateWorkLoadPercentage();
+        $.ajax({
+            method: 'POST',
+            url: 'http://' + host + '/visitsScheduler/api/scheduleVisit/scheduleTechnicianVisit',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                visitDate: addVisitDate,
+                visitStartTime: visitStartTime,
+                visitEndtime: visitEndtime,
+                description: description,
+                technician: technician,
+                percentage: percentage
+            }),
+            success: function (result) {
+//                alert(result.toSource());
+                alert("Visit successfully scheduled");
+            },
+            error: function (error) {
+//                alert("Error" + error.toSource);
+                alert("Error: Please be sure to inter all data required");
+            }
+        });
+    });
+
+
+    // Calculate work load percentage
+    function calculateWorkLoadPercentage() {
+
+        visitStartTime = $('#visitStartTime').val();
+        visitEndtime = $('#visitEndtime').val();
+
+        isTimeHasHaveHour = visitEndtime.indexOf("30");
+        startTime = visitStartTime.substring(0, 2);
+        endTime = visitEndtime.substring(0, 2);
+//        alert(endTime);
+        range = endTime - startTime;
+        rangeWithHaveHour = (parseInt(endTime) + 0.5 - parseInt(startTime));
+//        alert("rangeWithHaveHour: " + rangeWithHaveHour);
+        switch (isTimeHasHaveHour) {
+            case -1:
+            {
+                switch (range) {
+                    case 1:
+                        return 25;
+                    case 2:
+                        return 50;
+                    case 3:
+                        return 75;
+                    case 4:
+                        return 100;
+                }
+            }
+            break;
+            case 3:
+            {
+                switch (rangeWithHaveHour) {
+                    case 0.5:
+                        return 15;
+                    case 1.5:
+                        return 40;
+                    case 2.5:
+                        return 65;
+                    case 3.5:
+                        return 90;
+                }
+            }
+            break;
+        }
+        return null;
+    } // End calculate function
 
 }); // End jQuery ready function
