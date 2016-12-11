@@ -1,7 +1,11 @@
 
 package visits.schedule.database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,11 +15,56 @@ import org.json.JSONObject;
  */
 public class ScheduleVisit extends DBConnection {
     
+    private final String ERROR_JSON = new String("{\"Error\":\"NO DATA AVAILABLE\"}");
+    JSONArray jsonArr = null;
+    JSONObject jsonData = null;
+    
+    public JSONArray getAll() throws JSONException, SQLException {
+        try {
+
+            ResultSet rs = super.runQuery("SELECT * from visits_schedule");
+            jsonArr = new JSONArray();
+            jsonData = new JSONObject();
+
+            while (rs.next()) {
+                int visitId = rs.getInt("id");
+//                int technician_id = rs.getInt("technician_id");
+                String title = rs.getString("title");
+                String visitDate = rs.getString("start_date");
+                String startTime = visitDate + "T" + rs.getString("start_time") + ":00";
+                String endtTime = visitDate + "T" + rs.getString("end_time")  + ":00";
+//                String percentage = rs.getString("percentage");
+
+                // Display result
+                System.out.println(endtTime);
+                
+//                jsonData.put("technician_id", technician_id);
+                jsonData.append("title", title);
+                jsonData.append("id", visitId);
+//                jsonData.put("startDate", visitDate);
+                jsonData.append("start", startTime);
+                jsonData.append("end", endtTime);
+//                jsonData.put("percentage", percentage);
+                
+                jsonArr.put(jsonData);
+            }
+            
+            super.cleanUp();
+            return jsonArr;
+            
+        } catch (Exception ex) {
+            Logger.getLogger(Technicians.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        super.cleanUp();
+        return new JSONArray(ERROR_JSON);
+    }
+    
     public boolean inserVisitSchedule(JSONObject jsonInputObj) throws JSONException, SQLException {
         
-        System.out.println("jsonInputObj" + jsonInputObj.toString());
+        System.out.println("jsonInputObj ==> " + jsonInputObj.toString());
         String visitDate = jsonInputObj.getString("visitDate");
-        String visitStartTime = jsonInputObj.getString("visitStartTime");
+        String visitStartTime = jsonInputObj.getString("visitStartTime").replaceAll("\\s","");
         String visitEndtime = jsonInputObj.getString("visitEndtime");
         String description = jsonInputObj.getString("description");
         int technician = Integer.parseInt(jsonInputObj.getString("technician"));

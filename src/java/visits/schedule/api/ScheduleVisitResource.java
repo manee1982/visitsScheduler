@@ -38,6 +38,26 @@ public class ScheduleVisitResource {
      */
     public ScheduleVisitResource() {
     }
+    
+    /**
+     * Retrieves representation of an instance of visits.schedule.api.TechniciansResource
+     * @return an instance of java.lang.String
+     */
+    @GET
+    @Path("getAll")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getXml() {
+        try {
+            //TODO return proper representation object
+            return new ScheduleVisit().getAll().toString();
+        } catch (JSONException ex) {
+            Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
 
     /**
      * PUT method for updating or creating an instance of TechniciansResource

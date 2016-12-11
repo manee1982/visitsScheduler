@@ -3,6 +3,9 @@ var date = new Date();
 
 $(document).ready(function () {
 
+    // Get the host name instead of localhost
+    var host = window.location.host;
+
     $('#calendar').fullCalendar({
         dayClick: function (current_date, jsEvent, view) {
             current_date = new Date(current_date.toString()); // Ex: Sun Dec 11 2016 07:00:00 GMT+0300 (AST)
@@ -18,6 +21,8 @@ $(document).ready(function () {
             $('.addVisitDate').val(visitDate);
             $('.visitTime').val(visitTime);
             $('#visitEndtime').val("");
+            $('#description').val("");
+            $('#div-message').remove();
             $("#addVisit").modal({
                 backdrop: 'static',
                 keyboard: false
@@ -38,20 +43,8 @@ $(document).ready(function () {
         eventLimit: true, // allow "more" link when too many events
         minTime: '12:00:00',
         maxTime: '16:30:00',
-        events: [
-            {
-                title: 'All Day Event',
-                start: '2016-12-09'
-            },
-            {
-                title: 'Birthday Party',
-                start: '2016-12-13T07:00:00'
-            }
-        ]
+        events: 'http://' + host + '/visitsScheduler/api/scheduleVisit/getAll'
     });
-
-    // Get the host name instead of localhost
-    var host = window.location.host;
 
     $.ajax({
         method: 'GET',
@@ -94,18 +87,19 @@ $(document).ready(function () {
         // alert(calculateWorkLoadPercentage());
         // send visit scheduling to server
         addVisitDate = $('#addVisitDate').val();
-        visitStartTime = $('#visitStartTime').val();
+        visitStartTime = $('#visitStartTime').val().replace(/ /g, '');
+        alert(visitStartTime);
         visitEndtime = $('#visitEndtime').val();
-        if(visitEndtime == ""){
+        if (visitEndtime == "") {
             alert("Error: Please be sure to inter all data required");
             return;
         }
         description = $('#description').val();
-        if(description == ""){
+        if (description == "") {
             alert("Error: Please be sure to inter all data required");
             return;
         }
-            
+
         technician = $('#technician').val();
         percentage = calculateWorkLoadPercentage();
         $.ajax({
@@ -124,7 +118,7 @@ $(document).ready(function () {
             }),
             success: function (result) {
 //                alert(result.toSource());
-                alert("Visit successfully scheduled");
+                $('.form-message').append("<div id='div-message' class='col-md-12'><p style='padding:4px' class='bg-success'>Visit successfully scheduled</p></div>");
             },
             error: function (error) {
 //                alert("Error" + error.toSource);
@@ -149,33 +143,33 @@ $(document).ready(function () {
 //        alert("rangeWithHaveHour: " + rangeWithHaveHour);
         switch (isTimeHasHaveHour) {
             case -1:
-            {
-                switch (range) {
-                    case 1:
-                        return 25;
-                    case 2:
-                        return 50;
-                    case 3:
-                        return 75;
-                    case 4:
-                        return 100;
+                {
+                    switch (range) {
+                        case 1:
+                            return 25;
+                        case 2:
+                            return 50;
+                        case 3:
+                            return 75;
+                        case 4:
+                            return 100;
+                    }
                 }
-            }
-            break;
+                break;
             case 3:
-            {
-                switch (rangeWithHaveHour) {
-                    case 0.5:
-                        return 15;
-                    case 1.5:
-                        return 40;
-                    case 2.5:
-                        return 65;
-                    case 3.5:
-                        return 90;
+                {
+                    switch (rangeWithHaveHour) {
+                        case 0.5:
+                            return 15;
+                        case 1.5:
+                            return 40;
+                        case 2.5:
+                            return 65;
+                        case 3.5:
+                            return 90;
+                    }
                 }
-            }
-            break;
+                break;
         }
         return null;
     } // End calculate function

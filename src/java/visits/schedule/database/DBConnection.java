@@ -64,6 +64,7 @@ public class DBConnection {
             
             stmt = getConnection().createStatement();
             stmt.executeUpdate(query);
+            // cleanUp();
             return true;
             
         } catch (Exception e) {
