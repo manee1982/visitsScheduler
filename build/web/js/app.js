@@ -39,7 +39,7 @@ $(document).ready(function () {
                     techniciansIds = result.id;
                     // poulate technician list
                     for (i = 0; i < technicians.length; i++) {
-                        $('#technician').append("<option value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
+                        $('#technician').append("<option class=\"bg-green\" value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
                     }
                 }
             });
@@ -197,8 +197,8 @@ $(document).ready(function () {
         for (i = 0; i < workingLoadtechnician_id.length; i++) {
             percent = workingLoadPercentage[i];
             $('#technician').find('option').each(function () {
-                if ($(this).val() == workingLoadtechnician_id) {
-                    
+                if ($(this).val() == workingLoadtechnician_id[i]) {
+                    $(this).removeClass('bg-green');
                     if (percent <= 50) {
                         $(this).addClass('bg-green');
                     }
