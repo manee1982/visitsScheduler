@@ -8,10 +8,13 @@ package visits.schedule.api;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import org.json.JSONException;
@@ -38,13 +41,14 @@ public class TechniciansResource {
      * Retrieves representation of an instance of visits.schedule.api.TechniciansResource
      * @return an instance of java.lang.String
      */
-    @GET
+    @POST
     @Path("getAll")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getXml() {
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public String getXml(@FormParam("visitDate") String visitDate) {
         try {
             //TODO return proper representation object
-            return new Technicians().getAll().toString();
+            return new Technicians().getAll(visitDate).toString();
         } catch (JSONException ex) {
             Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

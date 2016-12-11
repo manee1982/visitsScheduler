@@ -20,11 +20,12 @@ public class Technicians extends DBConnection {
 
     JSONObject jsonData = null;
 
-    public JSONObject getAll() throws JSONException, SQLException {
+    public JSONObject getAll(String visitDate) throws JSONException, SQLException {
         try {
 
-            ResultSet rs = super.runQuery("SELECT * from technicians");
             jsonData = new JSONObject();
+            ResultSet rs = super.runQuery("SELECT * from technicians");
+            
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -34,10 +35,21 @@ public class Technicians extends DBConnection {
                 jsonData.append("id", id);
                 jsonData.append("name", name);
                 jsonData.append("email", email);
+            }
+            super.cleanUp();
+            System.out.println("visitDate" + visitDate);
+            rs = super.runQuery("SELECT * FROM `visits_schedule` "
+                    + "WHERE start_date = '"+visitDate+"' ");
+            while (rs.next()) {
+                int technician_id = rs.getInt("technician_id");
+                int percentage = rs.getInt("percentage");
+                
+                jsonData.append("technician_id", technician_id);
+                jsonData.append("percentage", percentage);
                 
                 //Display values
-                System.out.println("name: " + name);
-                System.out.println("email: " + email);
+                System.out.println("technician_id: " + technician_id);
+                System.out.println("percentage: " + percentage);
             }
             
             super.cleanUp();

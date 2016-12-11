@@ -5,6 +5,9 @@ $(document).ready(function () {
 
     // Get the host name instead of localhost
     var host = window.location.host;
+    // Technician data and their working load
+    var workingLoadPercentage = null;
+    var workingLoadtechnician_id = null;
 
     $('#calendar').fullCalendar({
         dayClick: function (current_date, jsEvent, view) {
@@ -15,14 +18,40 @@ $(document).ready(function () {
             visitTime = current_date.getHours() + ' : ' + current_date.getMinutes();
             if (current_date.getMinutes() == 0)
                 visitTime = current_date.getHours() + ':' + current_date.getMinutes() + '0';
+
+            // clear technician drop-down list
+            $('#technician').find('option').remove();
+
             /*
-             *	get all tehnician from java Resful (JAX-RS) web resvice
+             *	get all tehnician from java Resful (JAX-RS) web resvice, then 
+             *	populate it to drop-down list.
              */
+            $.ajax({
+                method: 'POST',
+                url: 'http://' + host + '/visitsScheduler/api/technicians/getAll',
+                data: {visitDate: visitDate},
+                success: function (result) {
+//                alert("Result is: " + result.toSource());
+                    workingLoadPercentage = result.percentage;
+                    workingLoadtechnician_id = result.technician_id;
+                        
+                    technicians = result.name;
+                    techniciansIds = result.id;
+                    // poulate technician list
+                    for (i = 0; i < technicians.length; i++) {
+                        $('#technician').append("<option value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
+                    }
+                }
+            });
+            // clean dialog elements
             $('.addVisitDate').val(visitDate);
             $('.visitTime').val(visitTime);
             $('#visitEndtime').val("");
             $('#description').val("");
             $('#div-message').remove();
+
+
+            // Trigger modal, aka dialog
             $("#addVisit").modal({
                 backdrop: 'static',
                 keyboard: false
@@ -46,20 +75,7 @@ $(document).ready(function () {
         events: 'http://' + host + '/visitsScheduler/api/scheduleVisit/getAll'
     });
 
-    $.ajax({
-        method: 'GET',
-        url: 'http://' + host + '/visitsScheduler/api/technicians/getAll',
-        success: function (result) {
-//                alert("Result is: " + result.name);
-            technicians = result.name;
-            techniciansIds = result.id;
-            // poulate technician list
-            for (i = 0; i < technicians.length; i++) {
-                $('#technician').append("<option value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
-            }
-        }
-    });
-
+    // Display costume time picker
     $('#visitEndtime').click(function () {
         $('.time-picker').fadeIn(500);
     });
@@ -88,7 +104,7 @@ $(document).ready(function () {
         // send visit scheduling to server
         addVisitDate = $('#addVisitDate').val();
         visitStartTime = $('#visitStartTime').val().replace(/ /g, '');
-        alert(visitStartTime);
+
         visitEndtime = $('#visitEndtime').val();
         if (visitEndtime == "") {
             alert("Error: Please be sure to inter all data required");
@@ -174,4 +190,27 @@ $(document).ready(function () {
         return null;
     } // End calculate function
 
+    // change technicians contextual background according 
+    // to percentage in workingLoad object
+    $('#technician').click(function() {
+//        alert(workingLoadPercentage + " ||| " + workingLoadtechnician_id);
+        for (i = 0; i < workingLoadtechnician_id.length; i++) {
+            percent = workingLoadPercentage[i];
+            $('#technician').find('option').each(function () {
+                if ($(this).val() == workingLoadtechnician_id) {
+                    
+                    if (percent <= 50) {
+                        $(this).addClass('bg-green');
+                    }
+                    if (percent > 50 && percent <= 75) {
+                        $(this).addClass('bg-yellow');
+                    }
+                    if (percent > 75 && percent <= 100) {
+                        $(this).addClass('bg-red');
+                    }
+
+                }
+            });
+        }
+    });
 }); // End jQuery ready function

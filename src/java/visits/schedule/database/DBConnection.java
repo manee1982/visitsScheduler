@@ -25,12 +25,12 @@ public class DBConnection {
     private final String DATABSE = "visits_scheduler";
     private final String HOST = "localhost";
     private final String PORT = "3306";
-    private final String DATABASE_USER = "manee";
-    private final String DATABASE_PASSWORD = "!@#manee";
+    private final String DATABASE_USER = "demo";
+    private final String DATABASE_PASSWORD = "demo";
     
     protected Connection connection = null;
     protected Statement stmt = null;
-    protected ResultSet rs;
+    protected ResultSet rs = null;
      
     
     protected Connection getConnection() throws SQLException, Exception {

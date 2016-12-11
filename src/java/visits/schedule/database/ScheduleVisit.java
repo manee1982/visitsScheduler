@@ -24,9 +24,10 @@ public class ScheduleVisit extends DBConnection {
 
             ResultSet rs = super.runQuery("SELECT * from visits_schedule");
             jsonArr = new JSONArray();
-            jsonData = new JSONObject();
+            
 
             while (rs.next()) {
+                jsonData = new JSONObject();
                 int visitId = rs.getInt("id");
 //                int technician_id = rs.getInt("technician_id");
                 String title = rs.getString("title");
@@ -39,11 +40,11 @@ public class ScheduleVisit extends DBConnection {
                 System.out.println(endtTime);
                 
 //                jsonData.put("technician_id", technician_id);
-                jsonData.append("title", title);
-                jsonData.append("id", visitId);
+                jsonData.put("title", title);
+                jsonData.put("id", visitId);
 //                jsonData.put("startDate", visitDate);
-                jsonData.append("start", startTime);
-                jsonData.append("end", endtTime);
+                jsonData.put("start", startTime);
+                jsonData.put("end", endtTime);
 //                jsonData.put("percentage", percentage);
                 
                 jsonArr.put(jsonData);

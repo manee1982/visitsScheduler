@@ -34,3 +34,12 @@ option {
 .time-picker ul li:hover {
     background: #f2f2f2;
 }
+.bg-yellow {
+    background-color: #FFFB35;
+}
+.bg-red {
+    background-color: #FF5656;
+}
+.bg-green {
+    background-color: #6BDD4B;
+}
