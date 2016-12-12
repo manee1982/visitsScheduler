@@ -57,7 +57,7 @@ public class ScheduleVisit extends DBConnection {
             Logger.getLogger(Technicians.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        super.cleanUp();
+//        super.cleanUp();
         return new JSONArray(ERROR_JSON);
     }
     
