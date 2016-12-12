@@ -17,6 +17,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.json.JSONException;
 import visits.schedule.database.Technicians;
 
@@ -45,16 +46,16 @@ public class TechniciansResource {
     @Path("getAll")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String getXml(@FormParam("visitDate") String visitDate) {
+    public Response getXml(@FormParam("visitDate") String visitDate) {
         try {
             //TODO return proper representation object
-            return new Technicians().getAll(visitDate).toString();
+            return Response.status(200).entity(new Technicians().getAll(visitDate).toString()).build();
         } catch (JSONException ex) {
             Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return null;
+        return Response.status(422).entity(new String(new String(" {\"Error\":\"Erorr Ocured\"}"))).build();
     }
 }
