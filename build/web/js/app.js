@@ -81,8 +81,8 @@ $(document).ready(function () {
         $('.time-picker').fadeIn(500);
     });
 
-    $('.time-picker ul li, #close, .close').click(function () {
-
+    $('.time-picker ul li').click(function () {
+        
         var visitStartTime = $('#visitStartTime').val().substring(0, 2);
         var visitEndTime = $(this).html();
         var visitEndTimeAfterCut = $(this).html().substring(0, 2);
@@ -97,6 +97,10 @@ $(document).ready(function () {
             if (visitEndTime != "Close" && visitEndTime !== '<span aria-hidden="true">×</span>')
                 alert("Please pick time above to Start Time value");
         }
+        $('.time-picker').fadeOut(500);
+    });
+    
+    $('#close, .close').click(function () {
         $('.time-picker').fadeOut(500);
     });
 
@@ -235,5 +239,15 @@ $(document).ready(function () {
                 }
             }
         }
+    });
+    
+    // hide time picker div
+    $(document).mouseup(function (e)
+{
+    var container = $('.time-picker');
+    if (!container.is(e.target) && container.has(e.target).length === 0)
+    {
+        container.fadeOut(500);
+    }
     });
 }); // End jQuery ready function
