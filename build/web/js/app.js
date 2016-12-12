@@ -21,6 +21,7 @@ $(document).ready(function () {
 
             // clear technician drop-down list
             $('#technician').find('option').remove();
+            $('#technician').append('<option value="" >Select technician</option>');
 
             /*
              *	get all tehnician from java Resful (JAX-RS) web resvice, then 
@@ -34,12 +35,12 @@ $(document).ready(function () {
 //                alert("Result is: " + result.toSource());
                     workingLoadPercentage = result.percentage;
                     workingLoadtechnician_id = result.technician_id;
-                        
+
                     technicians = result.name;
                     techniciansIds = result.id;
                     // poulate technician list
                     for (i = 0; i < technicians.length; i++) {
-                        $('#technician').append("<option class=\"bg-green\" value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
+                        $('#technician').append("<option value=\"" + techniciansIds[i] + "\"> " + technicians[i] + "</option>");
                     }
                 }
             });
@@ -49,7 +50,7 @@ $(document).ready(function () {
             $('#visitEndtime').val("");
             $('#description').val("");
             $('#div-message').remove();
-
+            $('.form-message div#techWorkingLoadContext').remove();
 
             // Trigger modal, aka dialog
             $("#addVisit").modal({
@@ -192,13 +193,12 @@ $(document).ready(function () {
 
     // change technicians contextual background according 
     // to percentage in workingLoad object
-    $('#technician').click(function() {
+    $('#technician').click(function () {
 //        alert(workingLoadPercentage + " ||| " + workingLoadtechnician_id);
         for (i = 0; i < workingLoadtechnician_id.length; i++) {
             percent = workingLoadPercentage[i];
             $('#technician').find('option').each(function () {
                 if ($(this).val() == workingLoadtechnician_id[i]) {
-                    $(this).removeClass('bg-green');
                     if (percent <= 50) {
                         $(this).addClass('bg-green');
                     }
@@ -211,6 +211,29 @@ $(document).ready(function () {
 
                 }
             });
+        }
+    });
+
+    // cotextual working load
+    $('#technician').change(function () {
+//        alert(workingLoadPercentage + " ||| " + workingLoadtechnician_id);
+        thisVal = $(this).val();
+        thisText = $('#technician option[value="'+thisVal+'"]').text();
+        $('.form-message div#techWorkingLoadContext').remove();
+        for (i = 0; i < workingLoadtechnician_id.length; i++) {
+            percent = workingLoadPercentage[i];
+            if (thisVal == workingLoadtechnician_id[i]) {
+                $('.form-message').append('<div id="techWorkingLoadContext" class="col-md-9 message-padding" ><p>' + thisText + ' - ' + percent + '%</p></div>');
+                if (percent <= 50) {
+                    $('.form-message div#techWorkingLoadContext').addClass('bg-green');
+                }
+                if (percent > 50 && percent <= 75) {
+                    $('.form-message div#techWorkingLoadContext').addClass('bg-yellow');
+                }
+                if ('.form-message' > 75 && percent <= 100) {
+                    $('.form-message div#techWorkingLoadContext').addClass('bg-red');
+                }
+            }
         }
     });
 }); // End jQuery ready function

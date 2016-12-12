@@ -43,3 +43,7 @@ option {
 .bg-green {
     background-color: #87FF66;
 }
+.message-padding {
+    margin-left: 100px;
+    padding: 5px 5px 0;
+}
