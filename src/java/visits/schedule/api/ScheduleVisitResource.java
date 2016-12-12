@@ -82,6 +82,6 @@ public class ScheduleVisitResource {
         } catch (JSONException ex) {
             Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return Response.status(422).entity(new String(new String(" {\"Error\":\"Erorr Ocured\"}"))).build();
     }
 }
