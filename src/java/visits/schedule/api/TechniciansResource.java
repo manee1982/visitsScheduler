@@ -34,8 +34,8 @@ public class TechniciansResource {
     }
 
     /**
-     * Retrieves technicians data and work load on selected data 
-     * Clicked data by user.
+     * Retrieves technicians data and work load 
+     * on selected data (Clicked data by user)
      * @return Object Response
      */
     @POST
