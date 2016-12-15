@@ -7,13 +7,11 @@ package visits.schedule.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.json.JSONObject;
 import visits.schedule.api.TechniciansResource;
 
 /**
@@ -33,6 +31,10 @@ public class DBConnection {
     protected ResultSet rs = null;
      
     
+    /*
+    *   Establish connection to database
+    *   @return Object(Connection)
+    */
     protected Connection getConnection() throws SQLException, Exception {
         try {
             String connectionURL = "jdbc:mysql://"+ HOST +":" + PORT + "/" + DATABSE;
@@ -46,6 +48,13 @@ public class DBConnection {
             throw e;
         }
     }
+    
+    /*
+    *   Run query, select
+    *   @param String query
+    *   
+    *   @return Object(ResultSet)
+    */
 
     protected ResultSet runQuery(String query) throws Exception {
         try {
@@ -59,6 +68,12 @@ public class DBConnection {
         }
     }
     
+    /*
+    *   Insert into database
+    *   @param String query
+    *   
+    *   @return boolean
+    */
     protected boolean insert(String query) throws SQLException {
         try {
             
@@ -68,9 +83,10 @@ public class DBConnection {
             return true;
             
         } catch (Exception e) {
-            Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, e);
-            return false;
+            Logger.getLogger(TechniciansResource.class.getName()).log(Level.SEVERE, null, e);  
         }
+        // return false, in of onsertion failed
+        return false;
     }
     
     protected void cleanUp() throws SQLException {
