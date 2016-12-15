@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package visits.schedule.api;
 
 import java.sql.SQLException;
@@ -13,7 +9,6 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
@@ -39,8 +34,9 @@ public class TechniciansResource {
     }
 
     /**
-     * Retrieves representation of an instance of visits.schedule.api.TechniciansResource
-     * @return an instance of java.lang.String
+     * Retrieves technicians data and work load on selected data 
+     * Clicked data by user.
+     * @return Object Response
      */
     @POST
     @Path("getAll")
